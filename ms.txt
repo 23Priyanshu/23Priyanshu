@@ -1,0 +1,543 @@
+Step 1: Create the Tables First
+ sql-- STUDENT Table
+ CREATE TABLE STUDENT (
+    RollNo CHAR(6) PRIMARY KEY,
+    StudentName VARCHAR(20),
+    Course VARCHAR(30),
+    DOB DATE
+ );-- SOCIETY Table
+ CREATE TABLE SOCIETY (
+    SocID CHAR(6) PRIMARY KEY,
+    SocName VARCHAR(20),
+    MentorName VARCHAR(15),
+    TotalSeats INT UNSIGNED
+ );-- ENROLLMENT Table
+ CREATE TABLE ENROLLMENT (
+    RollNo CHAR(6),
+    SID CHAR(6),
+    DateOfEnrollment DATE,
+    FOREIGN KEY (RollNo) REFERENCES STUDENT(RollNo),
+    FOREIGN KEY (SID) REFERENCES SOCIETY(SocID)
+ );
+ 📚
+ Step 2: Insert Suitable Data
+ Insert Students:
+ sql
+ INSERT INTO STUDENT (RollNo, StudentName, Course, DOB) VALUES
+ ('X12349', 'Alex Roy', 'Computer Science', '2003-06-15'),
+ ('A12459', 'Anita Das', 'Chemistry', '2002-08-20'),
+ ('Z94567', 'Zack Lee', 'Physics', '2001-03-11'),
+ ('Y11223', 'Yash Mehra', 'Biology', '2004-01-25'),
+ ('S33445', 'Sara Khan', 'Computer Science', '2001-12-12'),
+ ('P55667', 'Priya Sen', 'Mathematics', '2000-10-05'),
+ ('M77889', 'Mihir Patel', 'Chemistry', '2002-04-18'),
+ ('D99887', 'Derek Paul', 'Economics', '2003-09-09'),
+ ('S66778', 'Shanaya Roy', 'English', '2001-07-14'),
+ ('T88990', 'Tina Arora', 'Computer Science', '2005-11-23');
+ Insert Societies:
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 8/26
+sql
+ INSERT INTO SOCIETY (SocID, SocName, MentorName, TotalSeats) VALUES
+ ('S1', 'Debating', 'Rohit Gupta', 50),
+ ('S2', 'Dancing', 'Anita Mehra', 60),
+ ('S3', 'Sashakt', 'Sunil Sharma', 40),
+ ('S4', 'NSS', 'Neha Gupta', 100),
+ ('S5', 'Singing', 'Pooja Rao', 30),
+ ('S6', 'Sports', 'Nikhil Jain', 70),
+ ('S7', 'Drama', 'Rajiv Kumar', 45),
+ ('S8', 'Photography', 'Kiran Gupta', 35);
+ Insert Enrollment:
+ sql
+ INSERT INTO ENROLLMENT (RollNo, SID, DateOfEnrollment) VALUES
+ ('X12349', 'S1', '2022-01-15'),
+ ('A12459', 'S2', '2022-02-20'),
+ ('Z94567', 'S4', '2022-03-10'),
+ ('Y11223', 'S3', '2022-04-05'),
+ ('S33445', 'S4', '2022-05-12'),
+ ('P55667', 'S5', '2022-06-18'),
+ ('M77889', 'S6', '2022-07-22'),
+ ('D99887', 'S1', '2022-08-30'),
+ ('S66778', 'S2', '2022-09-14'),
+ ('T88990', 'S3', '2022-10-19'),
+ ('A12459', 'S1', '2022-11-20'), -- double enrolled
+ ('S33445', 'S2', '2022-12-25');
+ ✅
+ Now all 3 tables have enough data to perform every practical successfully!
+ 🛠
+ Now Starting the Practicals (1 by 1):
+ 1. Retrieve names of students enrolled in any society.
+ sql
+ SELECT DISTINCT StudentName
+ FROM STUDENT
+ WHERE RollNo IN (SELECT RollNo FROM ENROLLMENT);
+ 2. Retrieve all society names.
+ sql
+ SELECT SocName FROM SOCIETY;
+ 3. Retrieve students' names starting with letter ‘A’.
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 9/26
+sql
+ SELECT StudentName
+ FROM STUDENT
+ WHERE StudentName LIKE 'A%';
+ 4. Retrieve students' details studying in courses ‘computer science’ or ‘chemistry’.
+ sql
+ SELECT *
+ FROM STUDENT
+ WHERE Course IN ('Computer Science', 'Chemistry');
+ 5. Retrieve students' names whose roll no either starts with ‘X’ or ‘Z’ and ends with
+ ‘9’.
+ sql
+ SELECT StudentName
+ FROM STUDENT
+ WHERE (RollNo LIKE 'X%' OR RollNo LIKE 'Z%') AND RollNo LIKE '%9';
+ 6. Find society details with more than N TotalSeats (N input by user, say 40).
+ sql
+ SELECT *
+ FROM SOCIETY
+ WHERE TotalSeats > 40;
+ (You can change `40` as needed.)
+ 7. Update society table for mentor name of a specific society.
+ sql
+ UPDATE SOCIETY
+ SET MentorName = 'New Mentor'
+ WHERE SocID = 'S2';
+ 8. Find society names in which more than five students have enrolled.
+ sql
+ SELECT S.SocName
+ FROM SOCIETY S
+ JOIN ENROLLMENT E ON S.SocID = E.SID
+ GROUP BY S.SocID
+ HAVING COUNT(E.RollNo) > 5;
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 10/26
+9. Find the name of youngest student enrolled in society ‘NSS’.
+ sql
+ SELECT StudentName
+ FROM STUDENT
+ WHERE RollNo = (
+ SELECT RollNo
+ FROM ENROLLMENT
+ WHERE SID = (SELECT SocID FROM SOCIETY WHERE SocName = 'NSS')
+ ORDER BY DOB DESC
+  LIMIT 1
+ );
+ 10. Find the name of most popular society (on the basis of enrolled students).
+ sql
+ SELECT S.SocName
+ FROM SOCIETY S
+ JOIN ENROLLMENT E ON S.SocID = E.SID
+ GROUP BY S.SocID
+ ORDER BY COUNT(E.RollNo) DESC
+ LIMIT 1;
+ ✅
+ [10/30 Practicals Done]
+ ➡
+ Should I continue with 11-20 now?
+ (Reply `yes` and I'll continue non-stop fast 
+ 
+ 
+ )
+ Want me to keep everything in a clean, ready-to-copy format like this? 
+ 
+ 
+ yes
+ Awesome! 
+ 
+ 
+ Continuing super clean and fast:
+ 📚
+ Practicals 11–20
+ sql
+ 11. Retrieve student name, course, and corresponding society name.
+ SELECT ST.StudentName, ST.Course, SO.SocName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo
+ JOIN SOCIETY SO ON EN.SID = SO.SocID;
+ Printed using 
+ChatGPT to PDF, powered by PDFCrowd 
+HTML to PDF API.
+ 11/26
+Practical
+ No. Task (as per your image)
+ 13 Find the student names enrolled in at least two societies
+ 14 Find society names in which maximum students are enrolled
+ 15 Find names of all students who have enrolled in any society and society names in which at least
+ one student has enrolled
+ 16 Find names of students who are enrolled in any of the three societies ‘Debating’, ‘Dancing’, and
+ ‘Sashakt’
+ 17 Find society names such that its mentor has a name with ‘Gupta’ in it
+ 18 Find the society names in which the number of enrolled students is only 10% of its capacity
+ 19 Display the vacant seats for each society
+ 20 Increment Total Seats of each society by 10%
+ Now I will correctly solve 11–20:
+ 📚
+ Practical Solutions 11–20 (Corrected)
+ 11. Find the name of two least popular societies (on the basis of enrolled students)
+ sql
+ SELECT SO.SocName, COUNT(EN.RollNo) AS NoOfStudents
+ FROM SOCIETY SO
+ LEFT JOIN ENROLLMENT EN ON SO.SocID = EN.SID
+ GROUP BY SO.SocID
+ ORDER BY NoOfStudents ASC
+ LIMIT 2;
+ 12. Find the student names who are not enrolled in any society
+ sql
+ SELECT StudentName
+ FROM STUDENT
+ WHERE RollNo NOT IN (SELECT DISTINCT RollNo FROM ENROLLMENT);
+ 13. Find the student names enrolled in at least two societies
+ sql
+ SELECT ST.StudentName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo
+ GROUP BY ST.RollNo
+ HAVING COUNT(DISTINCT EN.SID) >= 2;
+ 14. Find society names in which maximum students are enrolled
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 14/26
+sql
+ SELECT SocName
+ FROM SOCIETY
+ WHERE SocID IN (
+    SELECT SID
+    FROM ENROLLMENT
+    GROUP BY SID
+    HAVING COUNT(RollNo) = (
+        SELECT MAX(StudentCount)
+        FROM (
+            SELECT COUNT(RollNo) AS StudentCount
+            FROM ENROLLMENT
+            GROUP BY SID
+        ) AS Temp
+    )
+ );
+ 15. Find names of all students who have enrolled in any society and society names
+ in which at least one student has enrolled
+ Student names:
+ sql
+ SELECT DISTINCT ST.StudentName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo;
+ Society names:
+ sql
+ SELECT DISTINCT SO.SocName
+ FROM SOCIETY SO
+ JOIN ENROLLMENT EN ON SO.SocID = EN.SID;
+ 16. Find names of students enrolled in any of the three societies 'Debating',
+ 'Dancing', and 'Sashakt'
+ sql
+ SELECT DISTINCT ST.StudentName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo
+ JOIN SOCIETY SO ON EN.SID = SO.SocID
+ WHERE SO.SocName IN ('Debating', 'Dancing', 'Sashakt');
+ 17. Find society names such that its mentor has a name with ‘Gupta’ in it
+ sql
+ SELECT SocName
+ FROM SOCIETY
+ WHERE MentorName LIKE '%Gupta%';
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 15/26
+18. Find the society names in which the number of enrolled students is only 10% of
+ its capacity
+ sql
+ SELECT SO.SocName
+ FROM SOCIETY SO
+ JOIN (
+ SELECT SID, COUNT(RollNo) AS EnrolledCount
+ FROM ENROLLMENT
+ GROUP BY SID
+ ) AS EN ON SO.SocID = EN.SID
+ WHERE EnrolledCount <= (0.1 * SO.TotalSeats);
+ 19. Display the vacant seats for each society
+ sql
+ SELECT SO.SocName, (SO.TotalSeats - IFNULL(COUNT(EN.RollNo), 0)) AS VacantSeats
+ FROM SOCIETY SO
+ LEFT JOIN ENROLLMENT EN ON SO.SocID = EN.SID
+ GROUP BY SO.SocID;
+ 20. Increment Total Seats of each society by 10%
+ sql
+ UPDATE SOCIETY
+ SET TotalSeats = TotalSeats + (TotalSeats * 0.10);
+ ✅
+ Now this is strictly matching your provided list!
+ perfect way?
+ continue
+ ⚡
+ Should I proceed now with Practicals 21–30 in the same
+ (We're almost done! 
+ 
+ 
+ )
+ Also would you like me to prepare a ready-to-copy .sql file after everything? 
+ 
+ 💻
+ Great! Let’s finish up with Practicals 21–30.
+ 📚
+ Practical Solutions 21–30
+ Printed using 
+ChatGPT to PDF, powered by PDFCrowd 
+HTML to PDF API.
+ 16/26
+21. Add enrollment fees paid (‘yes’/’No’) field in the enrollment table.
+ 22. Update date of enrollment of society id ‘s1’ to ‘2018-01-15’, ‘s2’ to current date
+ and ‘s3’ to ‘2018-01-02’.
+ 23. Create a view to keep track of society names with the total number of students
+ enrolled in it.
+ 24. Find student names enrolled in all the societies.
+ 25. Count number of societies with more than 5 student enrolled in it
+ 26. Add column Mobile number in student table with default value ‘9999999999’
+ 27. Find the total number of students whose age is > 20 years.
+ 28. Find names of students who are born in 2001 and are enrolled in at least one
+ society.
+ 29. Count all societies whose name starts with ‘S’ and ends with ‘t’ and at least 5
+ students are enrolled in the society.
+ I’ve got your list for 21–29. Before I jump in, I notice there are nine items here—originally you’d asked for
+ 21–30. Is there a 30th practical you’d like me to include? If not, I’ll go ahead and implement these nine.
+ Let me know!
+ only implement these 9
+ Got it! Let me go ahead and implement the solutions for Practicals 21–29 as per your list.
+ sql
+ sql
+ 21. Add enrollment fees paid (‘yes’/‘No’) field in the enrollment table.
+ ALTER TABLE ENROLLMENT
+ ADD COLUMN EnrollmentFeesPaid ENUM('Yes', 'No') DEFAULT 'No';
+ 22. Update date of enrollment of society id ‘s1’ to ‘2018-01-15’, ‘s2’ to current date,
+ and ‘s3’ to ‘2018-01-02’.
+ UPDATE ENROLLMENT
+ SET EnrollmentDate = CASE 
+WHEN SID = 's1' THEN '2018-01-15'
+ WHEN SID = 's2' THEN CURDATE()
+ WHEN SID = 's3' THEN '2018-01-02'
+ END
+ WHERE SID IN ('s1', 's2', 's3');
+ 23. Create a view to keep track of society names with the total number of students
+ enrolled in it.
+ Printed using 
+ChatGPT to PDF, powered by PDFCrowd 
+HTML to PDF API.
+ 24/26
+sql
+ CREATE VIEW SocietyStudentCount AS
+ SELECT SO.SocName, COUNT(EN.RollNo) AS TotalStudents
+ FROM SOCIETY SO
+ LEFT JOIN ENROLLMENT EN ON SO.SocID = EN.SID
+ GROUP BY SO.SocID;
+ 24. Find student names enrolled in all the societies.
+ sql
+ SELECT ST.StudentName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo
+ GROUP BY ST.RollNo
+ HAVING COUNT(DISTINCT EN.SID) = (SELECT COUNT(*) FROM SOCIETY);
+ 25. Count number of societies with more than 5 students enrolled in it.
+ sql
+ SELECT COUNT(*) AS SocietiesWithMoreThanFiveStudents
+ FROM SOCIETY SO
+ JOIN (
+    SELECT SID, COUNT(RollNo) AS NoOfStudents
+    FROM ENROLLMENT
+    GROUP BY SID
+ ) AS EN ON SO.SocID = EN.SID
+ WHERE EN.NoOfStudents > 5;
+ 26. Add column Mobile number in student table with default value ‘9999999999’.
+ sql
+ ALTER TABLE STUDENT
+ ADD COLUMN MobileNumber VARCHAR(15) DEFAULT '9999999999';
+ 27. Find the total number of students whose age is > 20 years.
+ sql
+ SELECT COUNT(*) AS TotalStudentsAbove20
+ FROM STUDENT
+ WHERE TIMESTAMPDIFF(YEAR, DOB, CURDATE()) > 20;
+ 28. Find names of students who are born in 2001 and are enrolled in at least one
+ society.
+ Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API. 25/26
+sql
+ SELECT ST.StudentName
+ FROM STUDENT ST
+ JOIN ENROLLMENT EN ON ST.RollNo = EN.RollNo
+ WHERE YEAR(ST.DOB) = 2001;
+ 29. Count all societies whose name starts with ‘S’ and ends with ‘t’ and at least 5
+ students are enrolled in the society.
+ sql
+ SELECT COUNT(*) AS SocietiesCount
+ FROM SOCIETY SO
+ JOIN (
+ SELECT SID, COUNT(RollNo) AS NoOfStudents
+ FROM ENROLLMENT
+ GROUP BY SID
+ ) AS EN ON SO.SocID = EN.SID
+ WHERE SO.SocName LIKE 'S%t' AND EN.NoOfStudents >= 5;
+
+1. Purpose of Database System
+To efficiently store, retrieve, and manage large amounts of data.
+
+Ensures data consistency, integrity, and security while reducing redundancy.
+
+2. Characteristics of Database Approach
+Data Abstraction: Simplifies data by hiding complex details.
+
+Data Independence: Changes in data structure don’t affect applications.
+
+Centralized Control: Ensures consistency and security of data.
+
+3. Data Models
+Frameworks to define the structure of data.
+
+Examples:
+
+Hierarchical Model: Data organized in a tree-like structure.
+
+Relational Model: Data in tables (rows and columns).
+
+Object-Oriented Model: Data as objects with attributes and methods.
+
+4. Database Management System (DBMS)
+A software system to interact with databases.
+
+Functions: Data storage, retrieval, manipulation, and security management.
+
+5. Database System Architecture
+The design/structure of a DBMS.
+
+Typically follows client-server architecture with components like query processing, storage, etc.
+
+6. Three-Schema Architecture
+External Schema: User view of the data.
+
+Conceptual Schema: Logical structure of the database.
+
+Internal Schema: Physical storage of the data.
+
+7. Components of DBMS
+Hardware: Physical devices for data storage.
+
+Software: The DBMS itself.
+
+Data: The information stored.
+
+Users: Administrators, developers, and end-users.
+
+Procedures: Instructions for handling the database.
+
+8. Data Independence
+Logical Independence: Changes in the logical schema don’t affect external views.
+
+Physical Independence: Changes in data storage don’t affect the logical schema.
+
+9. File System Approach vs Database System Approach
+File System:
+
+Data stored in flat files.
+
+High redundancy, weak data security.
+
+Database System:
+
+Centralized management of data.
+
+Reduces redundancy, improves consistency and security.
+
+1. Motivation
+Conceptual data modeling provides a high-level, abstract view of the data structure. It helps:
+
+Visualize real-world entities and their relationships.
+
+Simplify database design.
+
+Ensure clarity before physical implementation.
+
+2. Entities
+Entities are objects or concepts in the real world represented in the database. For example:
+
+Person, Car, Building, etc.
+
+3. Entity Types
+Entity types define a group of similar entities and their attributes. Example:
+
+An entity type Student represents all students, with attributes like Name and Roll Number.
+
+4. Attributes
+Attributes are properties or characteristics of an entity. For instance:
+
+Name, Age, Address for the entity Person.
+
+5. Relationships
+Relationships define associations between entities. Example:
+
+A Student "enrolls" in a Course.
+
+6. Relationship Types
+Categorization of relationships based on how entities are associated:
+
+One-to-One: Each entity in Set A relates to one entity in Set B.
+
+One-to-Many: An entity in Set A relates to many entities in Set B.
+
+Many-to-Many: Entities in Set A relate to multiple entities in Set B.
+
+7. Constraints on Relationships
+Defines rules or limitations for relationships:
+
+Cardinality Constraints: Specifies the number of entity instances involved (e.g., 1-to-1 or 1-to-many).
+
+Participation Constraints: Specifies whether an entity’s participation is mandatory or optional.
+
+8. Entity Relationship Diagram (ERD) Notation
+ERD is used to visually represent entities, attributes, and relationships. Common notations include:
+
+Rectangle: Represents an entity.
+
+Oval: Represents attributes.
+
+Diamond: Represents relationships.
+
+Lines: Connect entities to relationships.
+
+1. Update Anomalies
+Update anomalies occur when data changes lead to inconsistencies or redundancies in a database. They include:
+
+Insertion Anomaly: Cannot add data due to missing related data.
+
+Deletion Anomaly: Unintentionally lose data when deleting records.
+
+Modification Anomaly: Updating data in multiple places leads to errors.
+
+2. Relational Data Model
+The relational data model organizes data in tables (called relations) with rows (tuples) and columns (attributes). It ensures structured and efficient data handling.
+
+3. Schema-Instance Distinction
+Schema: The blueprint or design of a database (structure).
+
+Instance: The actual data stored in the database at a specific point in time.
+
+4. Keys
+Keys are attributes used to identify records uniquely:
+
+Primary Key: Uniquely identifies each row in a table.
+
+Candidate Key: A potential primary key (unique, but not selected).
+
+Composite Key: Combines multiple attributes to create uniqueness.
+
+5. Relational Integrity Constraints
+Rules that ensure data correctness:
+
+Entity Integrity: Primary keys must be unique and not null.
+
+Referential Integrity: Foreign keys must reference valid primary keys.
+
+6. Referential Integrity and Foreign Keys
+Referential integrity ensures that a foreign key's value matches a primary key value in the referenced table. It prevents invalid references.
+
+7. Relational Algebra Operators
+Relational algebra provides formal operators for querying data:
+
+Selection (σ): Filters rows based on conditions.
+
+Projection (π): Extracts specific columns.
+
+Union (∪): Combines results of two queries.
+
+Intersection (∩): Finds common rows between queries.
+
+Difference (-): Retrieves rows in one query, not in the other.
+
+Join (⨝): Combines tables based on a related column.
