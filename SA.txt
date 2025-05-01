@@ -1,0 +1,397 @@
+1. Insertion Sort (with comparison count)
+#include <iostream>
+using namespace std;
+
+void insertionSort(int arr[], int n, int &comparisons) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+            comparisons++;
+        }
+        if (j >= 0) comparisons++; // Last failed comparison
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int comparisons = 0;
+    insertionSort(arr, n, comparisons);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << "\nComparisons: " << comparisons << endl;
+    return 0;
+}
+2. Merge Sort (with comparison count)
+#include <iostream>
+using namespace std;
+
+int comparisons = 0;
+
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1, n2 = r - m;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (int i = 0; i < n2; i++) R[i] = arr[m + 1 + i];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        comparisons++;
+        if (L[i] <= R[j])
+            arr[k++] = L[i++];
+        else
+            arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = (l + r) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    mergeSort(arr, 0, n - 1);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << "\nComparisons: " << comparisons << endl;
+    return 0;
+}
+3. Heap Sort (with comparison count)
+#include <iostream>
+using namespace std;
+
+int comparisons = 0;
+
+void heapify(int arr[], int n, int i) {
+    int largest = i, l = 2 * i + 1, r = 2 * i + 2;
+
+    if (l < n && arr[l] > arr[largest]) {
+        largest = l;
+        comparisons++;
+    }
+    if (r < n && arr[r] > arr[largest]) {
+        largest = r;
+        comparisons++;
+    }
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+int main() {
+    int arr[] = {4, 10, 3, 5, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    heapSort(arr, n);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; ++i)
+        cout << arr[i] << " ";
+    cout << "\nComparisons: " << comparisons << endl;
+    return 0;
+}
+4. Quick Sort (with comparison count)
+#include <iostream>
+using namespace std;
+
+int comparisons = 0;
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high], i = low - 1;
+    for (int j = low; j < high; j++) {
+        comparisons++;
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << "\nComparisons: " << comparisons << endl;
+    return 0;
+}
+5. Strassen’s Matrix Multiplication
+#include <iostream>
+using namespace std;
+
+void add(int A[2][2], int B[2][2], int C[2][2]) {
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            C[i][j] = A[i][j] + B[i][j];
+}
+
+void sub(int A[2][2], int B[2][2], int C[2][2]) {
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            C[i][j] = A[i][j] - B[i][j];
+}
+
+void strassen(int A[2][2], int B[2][2], int C[2][2]) {
+    int M1 = (A[0][0] + A[1][1]) * (B[0][0] + B[1][1]);
+    int M2 = (A[1][0] + A[1][1]) * B[0][0];
+    int M3 = A[0][0] * (B[0][1] - B[1][1]);
+    int M4 = A[1][1] * (B[1][0] - B[0][0]);
+    int M5 = (A[0][0] + A[0][1]) * B[1][1];
+    int M6 = (A[1][0] - A[0][0]) * (B[0][0] + B[0][1]);
+    int M7 = (A[0][1] - A[1][1]) * (B[1][0] + B[1][1]);
+
+    C[0][0] = M1 + M4 - M5 + M7;
+    C[0][1] = M3 + M5;
+    C[1][0] = M2 + M4;
+    C[1][1] = M1 - M2 + M3 + M6;
+}
+
+int main() {
+    int A[2][2] = {{1, 2}, {3, 4}};
+    int B[2][2] = {{5, 6}, {7, 8}};
+    int C[2][2];
+
+    strassen(A, B, C);
+
+    cout << "Product matrix:\n";
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++)
+            cout << C[i][j] << " ";
+        cout << endl;
+    }
+    return 0;
+}
+6. Count Sort
+#include <iostream>
+using namespace std;
+
+void countSort(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max)
+            max = arr[i];
+
+    int count[max + 1] = {0};
+    for (int i = 0; i < n; i++)
+        count[arr[i]]++;
+
+    for (int i = 1; i <= max; i++)
+        count[i] += count[i - 1];
+
+    int output[n];
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+}
+
+int main() {
+    int arr[] = {4, 2, 2, 8, 3, 3, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    countSort(arr, n);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+    return 0;
+}
+7. Breadth-First Search (BFS)
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+void BFS(int start, vector<vector<int>> &adj, int V) {
+    vector<bool> visited(V, false);
+    queue<int> q;
+
+    visited[start] = true;
+    q.push(start);
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        cout << u << " ";
+
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}
+
+int main() {
+    int V = 5;
+    vector<vector<int>> adj(V);
+    adj[0] = {1, 2};
+    adj[1] = {0, 3};
+    adj[2] = {0, 3};
+    adj[3] = {1, 2, 4};
+    adj[4] = {3};
+
+    cout << "BFS starting from vertex 0: ";
+    BFS(0, adj, V);
+    cout << endl;
+    return 0;
+}
+8. Depth-First Search (DFS)
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void DFSUtil(int u, vector<vector<int>> &adj, vector<bool> &visited) {
+    visited[u] = true;
+    cout << u << " ";
+
+    for (int v : adj[u]) {
+        if (!visited[v])
+            DFSUtil(v, adj, visited);
+    }
+}
+
+void DFS(int start, vector<vector<int>> &adj, int V) {
+    vector<bool> visited(V, false);
+    DFSUtil(start, adj, visited);
+}
+
+int main() {
+    int V = 5;
+    vector<vector<int>> adj(V);
+    adj[0] = {1, 2};
+    adj[1] = {0, 3};
+    adj[2] = {0, 3};
+    adj[3] = {1, 2, 4};
+    adj[4] = {3};
+
+    cout << "DFS starting from vertex 0: ";
+    DFS(0, adj, V);
+    cout << endl;
+    return 0;
+}
+9. Prim’s Algorithm for Minimum Spanning Tree
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+int minKey(vector<int> key, vector<bool> mstSet, int V) {
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++)
+        if (!mstSet[v] && key[v] < min)
+            min = key[v], min_index = v;
+
+    return min_index;
+}
+
+void primMST(vector<vector<int>> graph, int V) {
+    vector<int> parent(V);
+    vector<int> key(V, INT_MAX);
+    vector<bool> mstSet(V, false);
+
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (int count = 0; count < V - 1; count++) {
+        int u = minKey(key, mstSet, V);
+        mstSet[u] = true;
+
+        for (int v = 0; v < V; v++)
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v])
+                parent[v] = u, key[v] = graph[u][v];
+    }
+
+    cout << "Edge \tWeight\n";
+    for (int i = 1; i < V; i++)
+        cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << "\n";
+}
+
+int main() {
+    int V = 5;
+    vector<vector<int>> graph = {
+        {0, 2, 0, 6, 0},
+        {2, 0, 3, 8, 5},
+        {0, 3, 0, 0, 7},
+        {6, 8, 0, 0, 9},
+        {0, 5, 7, 9, 0}
+    };
+
+    primMST(graph, V);
+    return 0;
+}
+10. 0-1 Knapsack Problem
+#include <iostream>
+using namespace std;
+
+int knapsack(int W, int wt[], int val[], int n) {
+    int K[n + 1][W + 1];
+
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+            if (i == 0 || w == 0)
+                K[i][w] = 0;
+            else if (wt[i - 1] <= w)
+                K[i][w] = max(val[i - 1] + K[i - 1][w - wt[i - 1]], K[i - 1][w]);
+            else
+                K[i][w] = K[i - 1][w];
+        }
+    }
+    return K[n][W];
+}
+
+int main() {
+    int val[] = {60, 100, 120};
+    int wt[] = {10, 20, 30};
+    int W = 50;
+    int n = sizeof(val) / sizeof(val[0]);
+
+    cout << "Maximum value in Knapsack: " << knapsack(W, wt, val, n) << endl;
+    return 0;
+}
+
