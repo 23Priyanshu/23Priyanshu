@@ -395,3 +395,66 @@ int main() {
     return 0;
 }
 
+notes
+
+Unit 1: Searching, Sorting, and Selection
+Linear Search: Scans each element in a list sequentially until the target is found. Time Complexity: O(n)
+
+Binary Search: Efficient search for sorted lists; repeatedly halves the search space. Time Complexity: O(log n)
+
+Insertion Sort: Builds a sorted list by inserting elements one at a time in the correct position. Time Complexity: O(n²)
+
+Selection Sort: Finds the smallest element, places it first, then repeats for the rest. Time Complexity: O(n²)
+
+Bubble Sort: Repeatedly swaps adjacent elements if they are in the wrong order. Time Complexity: O(n²)
+
+Heapsort: Uses a heap data structure to sort elements efficiently. Time Complexity: O(n log n)
+
+Linear Time Sorting: Sorting methods that run in O(n), such as Counting Sort and Radix Sort.
+
+Selection Problem: Finding the k-th smallest/largest element in an unordered list (Median Selection).
+
+Running Time Analysis: Evaluates algorithm efficiency based on input size.
+
+Correctness: Proof that an algorithm always produces the correct output.
+
+Unit 2: Graphs
+Graph Traversals: Methods to visit nodes systematically:
+
+Depth-First Search (DFS): Explores deep into a graph before backtracking.
+
+Breadth-First Search (BFS): Explores neighbors level by level.
+
+Graph Connectivity: Checks whether all nodes in a graph are connected.
+
+Testing Bipartiteness: Determines if a graph can be divided into two sets where no two nodes within a set are connected.
+
+Directed Acyclic Graphs (DAG): Graph with directed edges and no cycles.
+
+Topological Ordering: Linear arrangement of a DAG’s nodes, respecting dependencies (used in scheduling tasks).
+
+Unit 3: Divide and Conquer
+Merge Sort: Divides the array, sorts, then merges back. Time Complexity: O(n log n)
+
+Quick Sort: Partitions the array and recursively sorts partitions. Time Complexity: O(n log n)
+
+Maximum-Subarray Problem: Finds the contiguous subarray with the largest sum.
+
+Strassen’s Algorithm: Efficient matrix multiplication using recursion to reduce operations. Time Complexity: O(n².81)
+
+Unit 4: Greedy Algorithms
+Greedy Algorithm Design: Makes local optimal choices at each step to solve problems efficiently.
+
+Minimum Spanning Trees (MST):
+
+Kruskal’s Algorithm: Sorts edges and connects components.
+
+Prim’s Algorithm: Expands the MST starting from a node.
+
+Fractional Knapsack Problem: Allows fractional selection of items to maximize profit.
+
+Correctness & Time Complexity:
+
+Greedy algorithms don’t always find the best solution.
+
+Analyzing performance ensures efficiency (often O(n log n) or O(n)).
